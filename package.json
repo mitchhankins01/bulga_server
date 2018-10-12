@@ -4,9 +4,8 @@
   "description": "Server for Bulga Client",
   "main": "app.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "ts-node ./lib/server.ts",
-    "start": "nodemon ./dist/server.js",
+    "start": "tsc && node dist/server.js",
+    "dev": "./node_modules/nodemon/bin/nodemon.js",
     "prod": "npm run build && npm run start"
   },
   "keywords": [
