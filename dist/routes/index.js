@@ -5,6 +5,9 @@ class Index {
         app.get('/', (req, res) => {
             res.status(200).send({ message: 'Sucess' });
         });
+        app.post('/tx', (req, res) => {
+            res.send(req.body);
+        });
     }
 }
 exports.default = Index;
