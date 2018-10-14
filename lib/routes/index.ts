@@ -7,6 +7,7 @@ export default class Index {
     });
 
     app.post('/tx', (req: Request, res: Response) => {
+      console.log(req.body);
       res.send(req.body);
     });
   }
