@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const bodyParser = require("body-parser");
-const routes_1 = require("./routes");
+const txRoute_1 = require("./routes/txRoute");
 class App {
     constructor() {
-        this.index = new routes_1.default();
+        this.txRoute = new txRoute_1.default();
         this.app = express();
         this.config();
-        this.index.routes(this.app);
+        this.txRoute.routes(this.app);
     }
     config() {
         this.app.use(bodyParser.json());

@@ -1,16 +1,16 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 
-import Index from './routes';
+import TXRoute from './routes/txRoute';
 
 class App {
   public app: express.Application;
-  public index: Index = new Index();
+  public txRoute: TXRoute = new TXRoute();
 
   constructor() {
     this.app = express();
     this.config();
-    this.index.routes(this.app);
+    this.txRoute.routes(this.app);
   }
 
   private config() {
