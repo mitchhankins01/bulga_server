@@ -13,6 +13,29 @@ interface Transaction {
 }
 
 export class TXController {
+  public deleteTransaction(req: Request, res: Response) {
+    TXModel.remove({ _id: req.params.id }, error => {
+      if (error) {
+        res.send(error);
+      }
+      res.json({ message: 'Transaction successfully deleted' });
+    });
+  }
+
+  public updateTransaction(req: Request, res: Response) {
+    TXModel.findOneAndUpdate(
+      { _id: req.params.id },
+      req.body,
+      { new: true },
+      (error, transaction) => {
+        if (error) {
+          res.send(error);
+        }
+        res.json(transaction);
+      }
+    );
+  }
+
   public getTransactionById(req: Request, res: Response) {
     TXModel.findById(req.params.id, (error, transaction) => {
       if (error) {
@@ -52,8 +75,6 @@ export class TXController {
       amount: transaction.amount,
       merchant: transaction.merchant
     });
-
-    console.log(newTransaction);
 
     newTransaction.save((error, tx) => {
       if (error) {

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-exports.TXSchma = new Schema({
+exports.TXSchema = new Schema({
     date: {
         type: String,
         required: 'Date missing'

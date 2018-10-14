@@ -6,7 +6,15 @@ class TXRoute {
         this.txController = new txController_1.TXController();
     }
     routes(app) {
-        app.route('/tx').post(this.txController.addTransaction);
+        app
+            .route('/tx')
+            .get(this.txController.getTransactions)
+            .post(this.txController.addTransaction);
+        app
+            .route('/tx/:id')
+            .get(this.txController.getTransactionById)
+            .patch(this.txController.updateTransaction)
+            .delete(this.txController.deleteTransaction);
     }
 }
 exports.default = TXRoute;
