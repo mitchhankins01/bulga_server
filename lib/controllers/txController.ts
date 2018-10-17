@@ -58,8 +58,8 @@ export class TXController {
     const source: string = req.params.source;
 
     console.log(`*** Source is: ${source} ***`);
+
     if (source === 'discover') {
-      console.log(`*** Source is: ${source} ***`);
       const transaction: Transaction = req.body.parse.output;
       const date = transaction.date
         .split(' ')
@@ -75,9 +75,10 @@ export class TXController {
         });
 
       const newTransaction = new TXModel({
-        date: `${date[1]}-${date[0]}-${date[2]}`,
         amount: transaction.amount,
-        merchant: transaction.merchant
+        date: `${date[1]}-${date[0]}-${date[2]}`,
+        merchant: transaction.merchant,
+        month: date[0],
       });
 
       newTransaction.save((error, tx) => {
@@ -86,6 +87,23 @@ export class TXController {
         }
         res.json(tx);
       });
+    } else if (source === 'ms') {
+      const transaction: Transaction = req.body.parse.output;
+      const d = transaction.date
+      const formatted = `${d.substr(3, 2)}-${d.substr(0, 2)}-${d.substr(6)}`;
+
+      const newTransaction = new TXModel({
+        amount: transaction.amount,
+        date: formatted,
+        merchant: transaction.merchant,
+        month: d.substr(0, 2)
+      });
+
+      newTransaction.save((error, tx) => {
+        if (error) {
+          res.send(error);
+        }
+        res.json(tx);
     }
   }
 }

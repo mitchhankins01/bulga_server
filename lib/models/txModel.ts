@@ -14,5 +14,13 @@ export const TXSchema = new Schema({
   merchant: {
     type: String,
     required: 'Merchant missing'
+  },
+  month: {
+    type: String,
+    required: 'Month missing'
+  },
+  category: {
+    type: String,
+    default: 'Others'
   }
 });
