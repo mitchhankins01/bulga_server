@@ -70,12 +70,16 @@ export class TXController {
       tx = req.body;
     }
 
+    const monthFromString = moment()
+      .month(tx.month)
+      .format('M');
+
     const newTransaction = new TXModel({
       amount: tx.amount,
       day: tx.day,
-      fullDate: `${tx.year}-${tx.month}-${tx.day}`,
+      fullDate: `${tx.year}-${monthFromString}-${tx.day}`,
       merchant: tx.merchant,
-      month: tx.month,
+      month: monthFromString,
       year: tx.year
     });
 
