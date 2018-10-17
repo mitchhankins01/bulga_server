@@ -78,7 +78,7 @@ export class TXController {
         amount: transaction.amount,
         date: `${date[1]}-${date[0]}-${date[2]}`,
         merchant: transaction.merchant,
-        month: date[0],
+        month: date[0]
       });
 
       newTransaction.save((error, tx) => {
@@ -89,7 +89,7 @@ export class TXController {
       });
     } else if (source === 'ms') {
       const transaction: Transaction = req.body.parse.output;
-      const d = transaction.date
+      const d = transaction.date;
       const formatted = `${d.substr(3, 2)}-${d.substr(0, 2)}-${d.substr(6)}`;
 
       const newTransaction = new TXModel({
@@ -104,6 +104,7 @@ export class TXController {
           res.send(error);
         }
         res.json(tx);
+      });
     }
   }
 }
