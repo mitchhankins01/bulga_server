@@ -7,9 +7,10 @@ import { TXSchema } from '../models/txModel';
 const TXModel = mongoose.model('Transaction', TXSchema);
 
 interface Transaction {
+  amount: string;
+  category?: string;
   date: string;
   merchant: string;
-  amount: string;
 }
 
 export class TXController {
@@ -77,8 +78,7 @@ export class TXController {
       const newTransaction = new TXModel({
         amount: transaction.amount,
         date: `${date[1]}-${date[0]}-${date[2]}`,
-        merchant: transaction.merchant,
-        month: date[0]
+        merchant: transaction.merchant
       });
 
       newTransaction.save((error, tx) => {
@@ -95,8 +95,23 @@ export class TXController {
       const newTransaction = new TXModel({
         amount: transaction.amount,
         date: formatted,
-        merchant: transaction.merchant,
-        month: d.substr(0, 2)
+        merchant: transaction.merchant
+      });
+
+      newTransaction.save((error, tx) => {
+        if (error) {
+          res.send(error);
+        }
+        res.json(tx);
+      });
+    } else {
+      const transaction: Transaction = req.body;
+
+      const newTransaction = new TXModel({
+        amount: transaction.amount,
+        category: transaction.category,
+        date: transaction.date,
+        merchant: transaction.merchant
       });
 
       newTransaction.save((error, tx) => {
