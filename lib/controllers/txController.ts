@@ -7,10 +7,13 @@ import { TXSchema } from '../models/txModel';
 const TXModel = mongoose.model('Transaction', TXSchema);
 
 interface Transaction {
+  day: string;
+  year: string;
+  month: string;
   amount: string;
-  category?: string;
-  date: string;
+  fullDate: string;
   merchant: string;
+  category?: string;
 }
 
 export class TXController {
@@ -56,70 +59,31 @@ export class TXController {
   }
 
   public addTransaction(req: Request, res: Response) {
+    let tx: Transaction;
     const source: string = req.params.source;
 
     console.log(`*** Source is: ${source} ***`);
 
-    if (source === 'discover') {
-      const transaction: Transaction = req.body.parse.output;
-      const date = transaction.date
-        .split(' ')
-        .map(str => str.replace(/,/g, ''))
-        .map(str => {
-          if (str.match(/^[A-Za-z]+$/)) {
-            return moment()
-              .month(str)
-              .format('M');
-          } else {
-            return str;
-          }
-        });
-
-      const newTransaction = new TXModel({
-        amount: transaction.amount,
-        date: `${date[1]}-${date[0]}-${date[2]}`,
-        merchant: transaction.merchant
-      });
-
-      newTransaction.save((error, tx) => {
-        if (error) {
-          res.send(error);
-        }
-        res.json(tx);
-      });
-    } else if (source === 'ms') {
-      const transaction: Transaction = req.body.parse.output;
-      const d = transaction.date;
-      const formatted = `${d.substr(3, 2)}-${d.substr(0, 2)}-${d.substr(6)}`;
-
-      const newTransaction = new TXModel({
-        amount: transaction.amount,
-        date: formatted,
-        merchant: transaction.merchant
-      });
-
-      newTransaction.save((error, tx) => {
-        if (error) {
-          res.send(error);
-        }
-        res.json(tx);
-      });
+    if (source === 'zapier') {
+      tx = req.body.parse.output;
     } else {
-      const transaction: Transaction = req.body;
-
-      const newTransaction = new TXModel({
-        amount: transaction.amount,
-        category: transaction.category,
-        date: transaction.date,
-        merchant: transaction.merchant
-      });
-
-      newTransaction.save((error, tx) => {
-        if (error) {
-          res.send(error);
-        }
-        res.json(tx);
-      });
+      tx = req.body;
     }
+
+    const newTransaction = new TXModel({
+      amount: tx.amount,
+      day: tx.day,
+      fullDate: `${tx.year}-${tx.month}-${tx.day}`,
+      merchant: tx.merchant,
+      month: tx.month,
+      year: tx.year
+    });
+
+    newTransaction.save((error, tx) => {
+      if (error) {
+        res.send(error);
+      }
+      res.json(tx);
+    });
   }
 }

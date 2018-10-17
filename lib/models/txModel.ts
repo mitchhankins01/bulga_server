@@ -3,10 +3,6 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const TXSchema = new Schema({
-  date: {
-    type: String,
-    required: 'Date missing'
-  },
   amount: {
     type: Number,
     required: 'Amount missing'
@@ -18,5 +14,21 @@ export const TXSchema = new Schema({
   category: {
     type: String,
     default: 'Others'
+  },
+  fullDate: {
+    type: String,
+    required: 'Date missing'
+  },
+  year: {
+    type: String,
+    required: 'Year missing'
+  },
+  month: {
+    type: String,
+    required: 'Month missing'
+  },
+  day: {
+    type: String,
+    required: 'Day missing'
   }
 });
