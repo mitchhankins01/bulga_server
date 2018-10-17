@@ -18,7 +18,7 @@ interface Transaction {
 
 export class TXController {
   public deleteTransaction(req: Request, res: Response) {
-    TXModel.remove({ _id: req.params.id }, error => {
+    TXModel.deleteOne({ _id: req.params.id }, error => {
       if (error) {
         res.send(error);
       }
@@ -64,6 +64,13 @@ export class TXController {
 
     console.log(`*** Source is: ${source} ***`);
 
+    /*
+
+    CURRENT IMPLEMENTATION MESSES UP MONTH WHEN POSTED FROM WEB
+    INCREASES MONTH BY 1
+
+    */
+
     if (source === 'zapier') {
       tx = req.body.parse.output;
     } else {
@@ -76,6 +83,7 @@ export class TXController {
 
     const newTransaction = new TXModel({
       amount: tx.amount,
+      category: tx.category,
       day: tx.day,
       fullDate: `${tx.year}-${monthFromString}-${tx.day}`,
       merchant: tx.merchant,

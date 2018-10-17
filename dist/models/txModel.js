@@ -3,10 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 exports.TXSchema = new Schema({
-    date: {
-        type: String,
-        required: 'Date missing'
-    },
     amount: {
         type: Number,
         required: 'Amount missing'
@@ -18,6 +14,22 @@ exports.TXSchema = new Schema({
     category: {
         type: String,
         default: 'Others'
+    },
+    fullDate: {
+        type: String,
+        required: 'Date missing'
+    },
+    year: {
+        type: String,
+        required: 'Year missing'
+    },
+    month: {
+        type: String,
+        required: 'Month missing'
+    },
+    day: {
+        type: String,
+        required: 'Day missing'
     }
 });
 //# sourceMappingURL=txModel.js.map
