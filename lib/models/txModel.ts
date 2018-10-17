@@ -15,10 +15,6 @@ export const TXSchema = new Schema({
     type: String,
     required: 'Merchant missing'
   },
-  month: {
-    type: String,
-    required: 'Month missing'
-  },
   category: {
     type: String,
     default: 'Others'

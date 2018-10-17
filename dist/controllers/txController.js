@@ -38,31 +38,68 @@ class TXController {
         });
     }
     addTransaction(req, res) {
-        const transaction = req.body.parse.output;
-        const date = transaction.date
-            .split(' ')
-            .map(str => str.replace(/,/g, ''))
-            .map(str => {
-            if (str.match(/^[A-Za-z]+$/)) {
-                return moment()
-                    .month(str)
-                    .format('M');
-            }
-            else {
-                return str;
-            }
-        });
-        const newTransaction = new TXModel({
-            date: `${date[1]}-${date[0]}-${date[2]}`,
-            amount: transaction.amount,
-            merchant: transaction.merchant
-        });
-        newTransaction.save((error, tx) => {
-            if (error) {
-                res.send(error);
-            }
-            res.json(tx);
-        });
+        const source = req.params.source;
+        console.log(`*** Source is: ${source} ***`);
+        if (source === 'discover') {
+            const transaction = req.body.parse.output;
+            const date = transaction.date
+                .split(' ')
+                .map(str => str.replace(/,/g, ''))
+                .map(str => {
+                if (str.match(/^[A-Za-z]+$/)) {
+                    return moment()
+                        .month(str)
+                        .format('M');
+                }
+                else {
+                    return str;
+                }
+            });
+            const newTransaction = new TXModel({
+                amount: transaction.amount,
+                date: `${date[1]}-${date[0]}-${date[2]}`,
+                merchant: transaction.merchant
+            });
+            newTransaction.save((error, tx) => {
+                if (error) {
+                    res.send(error);
+                }
+                res.json(tx);
+            });
+        }
+        else if (source === 'ms') {
+            const transaction = req.body.parse.output;
+            const d = transaction.date;
+            const formatted = `${d.substr(3, 2)}-${d.substr(0, 2)}-${d.substr(6)}`;
+            const newTransaction = new TXModel({
+                amount: transaction.amount,
+                date: formatted,
+                merchant: transaction.merchant
+            });
+            newTransaction.save((error, tx) => {
+                if (error) {
+                    res.send(error);
+                }
+                res.json(tx);
+            });
+        }
+        else {
+            const transaction = req.body;
+            const newTransaction = new TXModel({
+                amount: transaction.amount,
+                category: transaction.category,
+                date: transaction.date,
+                merchant: transaction.merchant
+            });
+            newTransaction.save((error, tx) => {
+                if (error) {
+                    console.log(error);
+                    res.send(error);
+                }
+                console.log('success');
+                res.json(tx);
+            });
+        }
     }
 }
 exports.TXController = TXController;

@@ -14,6 +14,10 @@ exports.TXSchema = new Schema({
     merchant: {
         type: String,
         required: 'Merchant missing'
+    },
+    category: {
+        type: String,
+        default: 'Others'
     }
 });
 //# sourceMappingURL=txModel.js.map

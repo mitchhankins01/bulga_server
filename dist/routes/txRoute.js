@@ -10,6 +10,7 @@ class TXRoute {
             .route('/tx')
             .get(this.txController.getTransactions)
             .post(this.txController.addTransaction);
+        app.route('/tx/:source').post(this.txController.addTransaction);
         app
             .route('/tx/:id')
             .get(this.txController.getTransactionById)
