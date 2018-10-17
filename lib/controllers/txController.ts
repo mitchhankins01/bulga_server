@@ -55,32 +55,37 @@ export class TXController {
   }
 
   public addTransaction(req: Request, res: Response) {
-    const transaction: Transaction = req.body.parse.output;
+    const source: string = req.params.source;
 
-    const date = transaction.date
-      .split(' ')
-      .map(str => str.replace(/,/g, ''))
-      .map(str => {
-        if (str.match(/^[A-Za-z]+$/)) {
-          return moment()
-            .month(str)
-            .format('M');
-        } else {
-          return str;
-        }
+    console.log(`*** Source is: ${source} ***`);
+    if (source === 'discover') {
+      console.log(`*** Source is: ${source} ***`);
+      const transaction: Transaction = req.body.parse.output;
+      const date = transaction.date
+        .split(' ')
+        .map(str => str.replace(/,/g, ''))
+        .map(str => {
+          if (str.match(/^[A-Za-z]+$/)) {
+            return moment()
+              .month(str)
+              .format('M');
+          } else {
+            return str;
+          }
+        });
+
+      const newTransaction = new TXModel({
+        date: `${date[1]}-${date[0]}-${date[2]}`,
+        amount: transaction.amount,
+        merchant: transaction.merchant
       });
 
-    const newTransaction = new TXModel({
-      date: `${date[1]}-${date[0]}-${date[2]}`,
-      amount: transaction.amount,
-      merchant: transaction.merchant
-    });
-
-    newTransaction.save((error, tx) => {
-      if (error) {
-        res.send(error);
-      }
-      res.json(tx);
-    });
+      newTransaction.save((error, tx) => {
+        if (error) {
+          res.send(error);
+        }
+        res.json(tx);
+      });
+    }
   }
 }
