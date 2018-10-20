@@ -1,6 +1,6 @@
 {
-  "ignore": ["**/*.test.ts", "**/*.spec.ts", ".git", "node_modules"],
   "watch": ["lib"],
-  "exec": "npm start",
-  "ext": "ts"
+  "ext": "ts",
+  "ignore": ["lib/**/*.spec.ts"],
+  "exec": "ts-node ./lib/server.ts"
 }

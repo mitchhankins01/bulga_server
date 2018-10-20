@@ -8,7 +8,7 @@
     "postinstall": "npm run build-ts",
     "start": "npm run serve",
     "serve": "node dist/server.js",
-    "dev": "npm run build-ts && NODE_ENV=development node dist/server.js",
+    "dev": "NODE_ENV=development nodemon",
     "watch-ts": "tsc -w"
   },
   "keywords": [
