@@ -3,7 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const session = require("express-session");
 const txRoute_1 = require("./routes/txRoute");
+require('./models/UserModel');
+require('./config/passport');
 if (process.env.NODE_ENV === 'development') {
     require('dotenv').config();
 }
@@ -30,6 +33,12 @@ class App {
                 next();
             }
         });
+        this.app.use(session({
+            cookie: { maxAge: 6000 },
+            resave: false,
+            saveUninitialized: false,
+            secret: process.env.PASSPORT_SECRET
+        }));
     }
     mongoInit() {
         mongoose.Promise = global.Promise;
