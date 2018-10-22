@@ -1,3 +1,4 @@
+import auth from '../config/auth';
 import { TXController } from '../controllers/txController';
 
 export default class TXRoute {
@@ -6,15 +7,15 @@ export default class TXRoute {
   public routes(app) {
     app
       .route('/tx')
-      .get(this.txController.getTransactions)
-      .post(this.txController.addTransaction);
+      .get(auth.required, this.txController.getTransactions)
+      .post(auth.required, this.txController.addTransaction);
 
     app.route('/tx/:source').post(this.txController.addTransaction);
 
     app
       .route('/tx/:id')
-      .get(this.txController.getTransactionById)
-      .patch(this.txController.updateTransaction)
-      .delete(this.txController.deleteTransaction);
+      .get(auth.required, this.txController.getTransactionById)
+      .patch(auth.required, this.txController.updateTransaction)
+      .delete(auth.required, this.txController.deleteTransaction);
   }
 }

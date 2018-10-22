@@ -12,28 +12,9 @@ interface User {
 }
 
 export class UserController {
-  public deleteUser(req: Request, res: Response) {
-    // TXModel.deleteOne({ _id: req.params.id }, error => {
-    //   if (error) {
-    //     res.send(error);
-    //   }
-    //   res.json({ message: 'Transaction successfully deleted' });
-    // });
-  }
+  public deleteUser(req: Request, res: Response) {}
 
-  public updateUser(req: Request, res: Response) {
-    // TXModel.findOneAndUpdate(
-    //   { _id: req.params.id },
-    //   req.body,
-    //   { new: true },
-    //   (error, transaction) => {
-    //     if (error) {
-    //       res.send(error);
-    //     }
-    //     res.json(transaction);
-    //   }
-    // );
-  }
+  public updateUser(req: Request, res: Response) {}
 
   public getUserById(req: any, res: Response) {
     const {

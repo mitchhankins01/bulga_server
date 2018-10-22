@@ -7,13 +7,14 @@ import { TXSchema } from '../models/txModel';
 const TXModel = mongoose.model('Transaction', TXSchema);
 
 interface Transaction {
-  day: string;
-  year: string;
-  month: string;
   amount: string;
+  author: string;
+  category: string;
+  day: string;
   fullDate: string;
   merchant: string;
-  category?: string;
+  month: string;
+  year: string;
 }
 
 export class TXController {
@@ -49,8 +50,8 @@ export class TXController {
     });
   }
 
-  public getTransactions(req: Request, res: Response) {
-    TXModel.find({}, (error, transactions) => {
+  public getTransactions(req: any, res: Response) {
+    TXModel.find({ author: req.payload.id }, (error, transactions) => {
       if (error) {
         res.send(error);
       }
@@ -82,6 +83,7 @@ export class TXController {
       .format('M');
 
     const newTransaction = new TXModel({
+      author: tx.author,
       amount: tx.amount,
       category: tx.category,
       day: tx.day,

@@ -3,6 +3,10 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export const TXSchema = new Schema({
+  author: {
+    type: String,
+    required: 'Author missing'
+  },
   amount: {
     type: Number,
     required: 'Amount missing'
