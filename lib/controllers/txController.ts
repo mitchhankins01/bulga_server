@@ -71,16 +71,17 @@ export class TXController {
     INCREASES MONTH BY 1
 
     */
+    let monthFromString: string;
 
     if (source === 'zapier') {
       tx = req.body.parse.output;
+      monthFromString = moment()
+        .month(tx.month)
+        .format('M');
     } else {
       tx = req.body;
+      monthFromString = tx.month;
     }
-
-    const monthFromString = moment()
-      .month(tx.month)
-      .format('M');
 
     const newTransaction = new TXModel({
       author: tx.author,
