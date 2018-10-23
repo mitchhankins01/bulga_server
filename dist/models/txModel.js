@@ -3,6 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 exports.TXSchema = new Schema({
+    author: {
+        type: String,
+        required: 'Author missing'
+    },
     amount: {
         type: Number,
         required: 'Amount missing'

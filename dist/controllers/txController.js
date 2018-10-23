@@ -30,7 +30,7 @@ class TXController {
         });
     }
     getTransactions(req, res) {
-        TXModel.find({}, (error, transactions) => {
+        TXModel.find({ author: req.payload.id }, (error, transactions) => {
             if (error) {
                 res.send(error);
             }
@@ -47,16 +47,19 @@ class TXController {
         INCREASES MONTH BY 1
     
         */
+        let monthFromString;
         if (source === 'zapier') {
             tx = req.body.parse.output;
+            monthFromString = moment()
+                .month(tx.month)
+                .format('M');
         }
         else {
             tx = req.body;
+            monthFromString = tx.month;
         }
-        const monthFromString = moment()
-            .month(tx.month)
-            .format('M');
         const newTransaction = new TXModel({
+            author: tx.author,
             amount: tx.amount,
             category: tx.category,
             day: tx.day,

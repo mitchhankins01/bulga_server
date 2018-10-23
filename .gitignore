@@ -1,7 +1,7 @@
 
 # Created by https://www.gitignore.io/api/node,visualstudio
-
-
+gmail-nodejs.json
+client_secret.json
 ### Node ###
 # Logs
 logs

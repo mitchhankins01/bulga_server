@@ -4,7 +4,9 @@ import * as mongoose from 'mongoose';
 import * as session from 'express-session';
 
 import TXRoute from './routes/txRoute';
-import UserRoute from './routes/UserRoute';
+import UserRoute from './routes/userRoute';
+
+// import Gmail from './config/gmail';
 
 if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
@@ -18,6 +20,8 @@ class App {
   public txRoute: TXRoute = new TXRoute();
   public userRoute: UserRoute = new UserRoute();
   public mongoUri: string = process.env.MONGO_URI;
+
+  // public gmail: Gmail = new Gmail();
 
   constructor() {
     this.app = express();
