@@ -1,5 +1,5 @@
 import auth from '../config/auth';
-import { UserController } from '../controllers/UserController';
+import { UserController } from '../controllers/userController';
 
 export default class UserRoute {
   public userController: UserController = new UserController();
