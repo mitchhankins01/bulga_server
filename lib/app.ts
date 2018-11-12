@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as mongoose from 'mongoose';
 import * as session from 'express-session';
+import * as cors from 'cors';
 
 import TXRoute from './routes/txRoute';
 import UserRoute from './routes/userRoute';
@@ -28,24 +29,9 @@ class App {
   }
 
   private config() {
+    this.app.use(cors());
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
-    this.app.use((req, res, next) => {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header(
-        'Access-Control-Allow-Methods',
-        'GET,PUT,POST,DELETE,PATCH,OPTIONS'
-      );
-      res.header(
-        'Access-Control-Allow-Headers',
-        'Content-Type, Authorization, Content-Length, X-Requested-With'
-      );
-      if (req.method === 'OPTIONS') {
-        res.sendStatus(200);
-      } else {
-        next();
-      }
-    });
     this.app.use(
       session({
         cookie: { maxAge: 6000 },

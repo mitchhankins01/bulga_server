@@ -34,6 +34,7 @@ exports.TXSchema = new Schema({
     day: {
         type: String,
         required: 'Day missing'
-    }
+    },
+    bankQueId: String
 });
 //# sourceMappingURL=txModel.js.map

@@ -2,14 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_1 = require("../config/auth");
 const txController_1 = require("../controllers/txController");
-const gmailController_1 = require("../controllers/gmailController");
 class TXRoute {
     constructor() {
         this.txController = new txController_1.TXController();
-        this.gmailController = new gmailController_1.default();
     }
     routes(app) {
-        app.get('/gmail', this.gmailController.getGmail);
+        app.get('/bankQue', this.txController.getBankTransactions);
         // .get('/gmailAuth', this.gmailController.getGmailAuth)
         // .get('/gmailCode', this.gmailController.getGmailCode);
         app

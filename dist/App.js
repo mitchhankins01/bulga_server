@@ -4,17 +4,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const session = require("express-session");
-const child_process_1 = require("child_process");
 const txRoute_1 = require("./routes/txRoute");
 const userRoute_1 = require("./routes/userRoute");
-// import Gmail from './config/gmail';
 if (process.env.NODE_ENV === 'development') {
     require('dotenv').config();
 }
 require('./models/UserModel');
 require('./config/passport');
 class App {
-    // public gmail: Gmail = new Gmail();
     constructor() {
         this.txRoute = new txRoute_1.default();
         this.userRoute = new userRoute_1.default();
@@ -24,9 +21,6 @@ class App {
         this.mongoInit();
         this.txRoute.routes(this.app);
         this.userRoute.routes(this.app);
-        const pythonProcess = child_process_1.spawn('python', [__dirname + '/main.py']);
-        pythonProcess.stdout.on('data', data => console.log(data));
-        pythonProcess.stderr.on('data', data => console.error(data.toString()));
     }
     config() {
         this.app.use(bodyParser.json());
