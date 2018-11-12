@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import * as moment from 'moment';
 import { Request, Response } from 'express';
-
+import { spawn } from 'child_process';
 import { TXSchema } from '../models/txModel';
 
 const TXModel = mongoose.model('Transaction', TXSchema);
@@ -15,9 +15,45 @@ interface Transaction {
   merchant: string;
   month: string;
   year: string;
+  bankQueId?: string;
 }
 
 export class TXController {
+  private transactions = [];
+
+  constructor() {
+    this.addTransaction = this.addTransaction.bind(this);
+    this.getBankTransactions = this.getBankTransactions.bind(this);
+  }
+
+  public getBankTransactions(req: Request, res: Response) {
+    this.transactions = [];
+
+    const pythonProcess = spawn(__dirname + '/python', [
+      __dirname + '/main.py',
+      'token.json'
+    ]);
+
+    pythonProcess.stdout.on('data', data => {
+      try {
+        TXModel.find(
+          { bankQueId: JSON.parse(data.toString()).id },
+          (err, res) => {
+            if (err) {
+              return console.log(err);
+            } else if (res.length === 0) {
+              return this.transactions.push(JSON.parse(data.toString()));
+            }
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    });
+    pythonProcess.stdout.on('end', () => res.send(this.transactions));
+    pythonProcess.stderr.on('data', data => console.error(data.toString()));
+  }
+
   public deleteTransaction(req: Request, res: Response) {
     TXModel.deleteOne({ _id: req.params.id }, error => {
       if (error) {
@@ -60,37 +96,27 @@ export class TXController {
   }
 
   public addTransaction(req: Request, res: Response) {
-    let tx: Transaction;
-    const source: string = req.params.source;
+    let tx: Transaction = req.body;
 
-    console.log(`*** Source is: ${source} ***`);
-
+    // if (tx.bankQueId) {
+    //   this.addedInBankQue.push(tx.bankQueId);
+    // }
     /*
 
     CURRENT IMPLEMENTATION MESSES UP MONTH WHEN POSTED FROM WEB
     INCREASES MONTH BY 1
 
     */
-    let monthFromString: string;
-
-    if (source === 'zapier') {
-      tx = req.body.parse.output;
-      monthFromString = moment()
-        .month(tx.month)
-        .format('M');
-    } else {
-      tx = req.body;
-      monthFromString = tx.month;
-    }
 
     const newTransaction = new TXModel({
       author: tx.author,
       amount: tx.amount,
+      bankQueId: tx.bankQueId || null,
       category: tx.category,
       day: tx.day,
-      fullDate: `${tx.year}-${monthFromString}-${tx.day}`,
+      fullDate: `${tx.year}-${tx.month}-${tx.day}`,
       merchant: tx.merchant,
-      month: monthFromString,
+      month: tx.month,
       year: tx.year
     });
 

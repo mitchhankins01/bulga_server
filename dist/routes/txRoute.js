@@ -9,9 +9,9 @@ class TXRoute {
         this.gmailController = new gmailController_1.default();
     }
     routes(app) {
-        app
-            .get('/gmail', this.gmailController.getGmail)
-            .get('/gmailCode', this.gmailController.getGmailCode);
+        app.get('/gmail', this.gmailController.getGmail);
+        // .get('/gmailAuth', this.gmailController.getGmailAuth)
+        // .get('/gmailCode', this.gmailController.getGmailCode);
         app
             .route('/tx')
             .get(auth_1.default.required, this.txController.getTransactions)

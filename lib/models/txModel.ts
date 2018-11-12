@@ -34,5 +34,6 @@ export const TXSchema = new Schema({
   day: {
     type: String,
     required: 'Day missing'
-  }
+  },
+  bankQueId: String
 });
