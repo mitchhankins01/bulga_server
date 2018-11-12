@@ -27,14 +27,16 @@ export class TXController {
   }
 
   public getBankTransactions(req: Request, res: Response) {
+    console.log('1. Transactions hit');
     this.transactions = [];
 
     const pythonProcess = spawn(__dirname + '/python', [
       __dirname + '/main.py',
       'token.json'
     ]);
-
+    console.log('2. Python started');
     pythonProcess.stdout.on('data', data => {
+      console.log('3. Python data', data.toString());
       try {
         TXModel.find(
           { bankQueId: JSON.parse(data.toString()).id },
