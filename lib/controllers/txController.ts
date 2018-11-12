@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import * as moment from 'moment';
 import { Request, Response } from 'express';
 import { spawn } from 'child_process';
 import { TXSchema } from '../models/txModel';
@@ -19,41 +18,8 @@ interface Transaction {
 }
 
 export class TXController {
-  private transactions = [];
-
   constructor() {
     this.addTransaction = this.addTransaction.bind(this);
-    this.getBankTransactions = this.getBankTransactions.bind(this);
-  }
-
-  public getBankTransactions(req: Request, res: Response) {
-    console.log('1. Transactions hit');
-    this.transactions = [];
-
-    const pythonProcess = spawn(__dirname + '/python', [
-      __dirname + '/main.py',
-      'token.json'
-    ]);
-    console.log('2. Python started');
-    pythonProcess.stdout.on('data', data => {
-      console.log('3. Python data', data.toString());
-      try {
-        TXModel.find(
-          { bankQueId: JSON.parse(data.toString()).id },
-          (err, res) => {
-            if (err) {
-              return console.log(err);
-            } else if (res.length === 0) {
-              return this.transactions.push(JSON.parse(data.toString()));
-            }
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    });
-    pythonProcess.stdout.on('end', () => res.send(this.transactions));
-    pythonProcess.stderr.on('data', data => console.error(data.toString()));
   }
 
   public deleteTransaction(req: Request, res: Response) {

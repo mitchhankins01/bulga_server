@@ -13,27 +13,30 @@ import datetime
 SCOPES = 'https://www.googleapis.com/auth/gmail.modify'
 
 
-def parse_mail(mail):
-    html = BeautifulSoup(mail, 'html.parser')
-    for table in html.select('table'):
-        if "".join(table['class']) == 'Content':
-            text = table.select('td')[0].text
-            amount_index = text.find('$')
-            date_index = text.find('Date:')
-            description_index = text.find('Description:')
-            location_index = text.find('Location:')
+def parse_mail(messages):
+    results = []
+    for message in messages:
+        html = BeautifulSoup(message, 'html.parser')
+        for table in html.select('table'):
+            if "".join(table['class']) == 'Content':
+                text = table.select('td')[0].text
+                amount_index = text.find('$')
+                date_index = text.find('Date:')
+                description_index = text.find('Description:')
+                location_index = text.find('Location:')
 
-            amount = text[amount_index + 1:date_index]
-            date = text[date_index + 6:description_index]
-            description = " ".join(
-                text[description_index + 13:location_index].split())
-            ret = dict(amount=amount, date=datetime.datetime.strptime(date, '%m/%d/%Y').strftime('%Y-%m-%d'),
-                       description=description, id="/".join(amount + date + description))
-            print(dumps(ret))
-            stdout.flush()
+                amount = text[amount_index + 1:date_index]
+                date = text[date_index + 6:description_index]
+                description = " ".join(
+                    text[description_index + 13:location_index].split())
+                ret = dict(amount=amount, date=datetime.datetime.strptime(date, '%m/%d/%Y').strftime('%Y-%m-%d'),
+                           description=description, id="/".join(amount + date + description))
+                results.append(ret)
+    print(dumps(results))
 
 
 def fetch_mail():
+    messages = []
     store = file.Storage(argv[1])
     credentials = store.get()
 
@@ -65,7 +68,9 @@ def fetch_mail():
             result['payload']['body']['data'].encode('UTF8'))
 
         mime_msg = message_from_bytes(msg_str)
-        parse_mail(str(mime_msg))
+        messages.append(str(mime_msg))
+
+    parse_mail(messages)
 
 
 if __name__ == '__main__':

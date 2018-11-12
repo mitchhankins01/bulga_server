@@ -1,11 +1,13 @@
 import auth from '../config/auth';
 import { TXController } from '../controllers/txController';
+import { QueController } from '../controllers/queController';
 
 export default class TXRoute {
   public txController: TXController = new TXController();
+  public queController: QueController = new QueController();
 
   public routes(app) {
-    app.get('/bankQue', this.txController.getBankTransactions);
+    app.get('/bankQue', this.queController.init);
     // .get('/gmailAuth', this.gmailController.getGmailAuth)
     // .get('/gmailCode', this.gmailController.getGmailCode);
 
