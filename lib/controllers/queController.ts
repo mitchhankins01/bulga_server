@@ -12,6 +12,7 @@ export class QueController {
   }
 
   public async init(req: Request, res: Response) {
+    console.log('EXECUTED');
     const pythonProcess = spawn('./python', ['./main.py', 'token.json']);
     pythonProcess.stdout.on('data', data => {
       this.processMessages(req, res, JSON.parse(data.toString()));
