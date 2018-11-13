@@ -43,7 +43,6 @@ def fetch_mail():
     credentials = store.get()
 
     stderr.write('store')
-    stderr.write(store)
 
     if not credentials or credentials.invalid:
         stderr.write('not creds')
@@ -62,8 +61,7 @@ def fetch_mail():
         .messages()\
         .list(userId='me', q=query)\
         .execute()
-    stderr.write('result')
-    stderr.write(result)
+
     for message in result['messages']:
         result = service\
             .users()\
