@@ -8,7 +8,7 @@ from base64 import urlsafe_b64decode
 from email import message_from_bytes
 from bs4 import BeautifulSoup
 from json import dumps
-from sys import stdout, argv
+from sys import stdout, stderr, argv
 from uuid import uuid4
 import datetime
 
@@ -42,7 +42,10 @@ def fetch_mail():
     store = file.Storage(argv[1])
     credentials = store.get()
 
+    stderr.write('store', store)
+
     if not credentials or credentials.invalid:
+        stderr.write('not creds')
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         credentials = tools.run_flow(flow, store)
 
@@ -58,7 +61,7 @@ def fetch_mail():
         .messages()\
         .list(userId='me', q=query)\
         .execute()
-
+ stderr.write('result', result)
     for message in result['messages']:
         result = service\
             .users()\
