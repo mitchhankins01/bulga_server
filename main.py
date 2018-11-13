@@ -61,7 +61,7 @@ def fetch_mail():
         .messages()\
         .list(userId='me', q=query)\
         .execute()
- stderr.write('result', result)
+    stderr.write('result', result)
     for message in result['messages']:
         result = service\
             .users()\
