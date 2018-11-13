@@ -45,10 +45,10 @@ def fetch_mail():
     stderr.write('store')
 
     if not credentials or credentials.invalid:
-        stderr.write('not creds')
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         credentials = tools.run_flow(flow, store)
 
+    stderr.write('creds are valid')
     service = build('gmail', 'v1', http=credentials.authorize(Http()))
 
     today = datetime.datetime.today().strftime('%Y/%m/%d')
