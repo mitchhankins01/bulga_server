@@ -12,18 +12,11 @@ export class QueController {
   }
 
   public async init(req: Request, res: Response) {
-    console.log('JS: START');
     const pythonProcess = spawn('python', ['./main.py', 'token.json']);
     pythonProcess.stdout.on('data', data => {
-      console.log(data.toString());
+      this.processMessages(req, res, JSON.parse(data.toString()));
     });
     pythonProcess.stderr.on('data', data => console.error(data.toString()));
-    // const pythonProcess = spawn('python', ['./main.py', 'token.json']);
-    // pythonProcess.stdout.on('data', data => {
-    //   this.processMessages(req, res, JSON.parse(data.toString()));
-    // });
-    // pythonProcess.stderr.on('data', data => console.error(data.toString()));
-    console.log('JS: END');
   }
 
   private async processMessages(req: Request, res: Response, transactions) {

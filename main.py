@@ -42,7 +42,6 @@ def fetch_mail():
     store = file.Storage(argv[1])
     credentials = store.get()
 
-    print('*** STORE ***')
     if not credentials or credentials.invalid:
         print('creds are NOT valid')
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
@@ -51,20 +50,14 @@ def fetch_mail():
     print('*** VALID CREDS ***')
     service = build('gmail', 'v1', http=credentials.authorize(Http()))
 
-    today = datetime.datetime.today().strftime('%Y/%m/%d')
-
-    query = 'label:unread from:notifications@morganstanley.com after:2018/11/11'.format(
+    query = 'label:unread from:notifications@morganstanley.com'.format(
         today=today)
-    print('*** QUERY ***', query)
-    try:
-        print('*** TRY ***')
-        result = service\
-            .users()\
-            .messages()\
-            .list(userId='me', q=query)\
-            .execute()
-    except Exception as e:
-        print('*** E ***', e)
+
+    result = service\
+        .users()\
+        .messages()\
+        .list(userId='me', q=query)\
+        .execute()
 
     print('*** Result ***', result)
     for message in result['messages']:
