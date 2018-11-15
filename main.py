@@ -56,11 +56,16 @@ def fetch_mail():
     query = 'label:unread from:Notifications@morganstanley.com after:{today}'.format(
         today=today)
     print('*** QUERY ***', query)
-    result = service\
-        .users()\
-        .messages()\
-        .list(userId='me', q=query)\
-        .execute()
+    try:
+        print('*** TRY ***')
+        result = service\
+            .users()\
+            .messages()\
+            .list(userId='me', q=query)\
+            .execute()
+    except Exception as e:
+        print('*** E ***', e)
+
     print('*** Result ***', result)
     for message in result['messages']:
         result = service\
