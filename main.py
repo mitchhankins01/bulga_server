@@ -42,26 +42,26 @@ def fetch_mail():
     store = file.Storage(argv[1])
     credentials = store.get()
 
-    print('store')
+    print('*** STORE ***')
     if not credentials or credentials.invalid:
         print('creds are NOT valid')
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         credentials = tools.run_flow(flow, store)
 
-    print('creds are valid')
+    print('*** VALID CREDS ***')
     service = build('gmail', 'v1', http=credentials.authorize(Http()))
 
     today = datetime.datetime.today().strftime('%Y/%m/%d')
 
     query = 'label:unread from:Notifications@morganstanley.com after:{today}'.format(
         today=today)
-
+    print('*** QUERY ***', query)
     result = service\
         .users()\
         .messages()\
         .list(userId='me', q=query)\
         .execute()
-
+    print('*** Result ***', result)
     for message in result['messages']:
         result = service\
             .users()\
