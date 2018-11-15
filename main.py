@@ -48,8 +48,7 @@ def fetch_mail():
 
     service = build('gmail', 'v1', http=credentials.authorize(Http()))
 
-    query = 'label:unread from:notifications@morganstanley.com'.format(
-        today=today)
+    query = 'label:unread from:notifications@morganstanley.com'
 
     result = service\
         .users()\
