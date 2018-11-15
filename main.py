@@ -43,11 +43,9 @@ def fetch_mail():
     credentials = store.get()
 
     if not credentials or credentials.invalid:
-        print('creds are NOT valid')
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         credentials = tools.run_flow(flow, store)
 
-    print('*** VALID CREDS ***')
     service = build('gmail', 'v1', http=credentials.authorize(Http()))
 
     query = 'label:unread from:notifications@morganstanley.com'.format(
@@ -59,7 +57,6 @@ def fetch_mail():
         .list(userId='me', q=query)\
         .execute()
 
-    print('*** Result ***', result)
     for message in result['messages']:
         result = service\
             .users()\
