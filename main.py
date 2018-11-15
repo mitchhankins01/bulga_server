@@ -53,7 +53,7 @@ def fetch_mail():
 
     today = datetime.datetime.today().strftime('%Y/%m/%d')
 
-    query = 'label:unread from:Notifications@morganstanley.com after:{today}'.format(
+    query = 'label:unread from:notifications@morganstanley.com after:2018/11/11'.format(
         today=today)
     print('*** QUERY ***', query)
     try:
