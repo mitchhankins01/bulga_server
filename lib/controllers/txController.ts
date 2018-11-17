@@ -2,8 +2,10 @@ import * as mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import { spawn } from 'child_process';
 import { TXSchema } from '../models/txModel';
+import { UserSchema } from '../models/UserModel';
 
 const TXModel = mongoose.model('Transaction', TXSchema);
+const UserModel = mongoose.model('User', UserSchema);
 
 interface Transaction {
   amount: string;
@@ -63,18 +65,21 @@ export class TXController {
     });
   }
 
-  public addTransaction(req: Request, res: Response) {
+  public addTransaction(req: any, res: Response) {
     let tx: Transaction = req.body;
 
-    // if (tx.bankQueId) {
-    //   this.addedInBankQue.push(tx.bankQueId);
-    // }
-    /*
-
-    CURRENT IMPLEMENTATION MESSES UP MONTH WHEN POSTED FROM WEB
-    INCREASES MONTH BY 1
-
-    */
+    UserModel.findById(req.payload.id, (err, user) => {
+      if (err) {
+        console.log(err);
+        res.send(401);
+      }
+      const isNegative = tx.amount[0] === '-';
+      const balance = isNegative
+        ? user.balance - Number(tx.amount.substr(1))
+        : user.balance + Number(tx.amount);
+      user.set({ balance });
+      user.save(err => console.log);
+    });
 
     const newTransaction = new TXModel({
       author: tx.author,

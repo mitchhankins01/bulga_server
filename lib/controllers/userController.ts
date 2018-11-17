@@ -4,7 +4,7 @@ import * as passport from 'passport';
 
 import { UserSchema } from '../models/UserModel';
 
-const Users = mongoose.model('Users', UserSchema);
+export const Users = mongoose.model('Users', UserSchema);
 
 interface User {
   email: string;
