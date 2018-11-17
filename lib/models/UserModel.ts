@@ -11,7 +11,8 @@ export const UserSchema = new Schema({
     unique: true
   },
   hash: String,
-  salt: String
+  salt: String,
+  balance: Number
 });
 
 UserSchema.methods.setPassword = function(password) {
@@ -47,7 +48,8 @@ UserSchema.methods.toAuthJson = function() {
   return {
     _id: this._id,
     email: this.email,
-    token: this.generateJWT()
+    token: this.generateJWT(),
+    balance: this.balance
   };
 };
 

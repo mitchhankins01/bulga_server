@@ -12,6 +12,25 @@ interface User {
 }
 
 export class UserController {
+  public updateBalance(req, res: Response) {
+    const {
+      body: { balance },
+      payload: { id }
+    } = req;
+
+    Users.findOneAndUpdate(
+      { _id: id },
+      { $set: { balance: balance } },
+      { new: true },
+      (err, doc) => {
+        if (err) {
+          return res.send(501);
+        }
+        res.send(doc);
+      }
+    );
+  }
+
   public deleteUser(req: Request, res: Response) {}
 
   public updateUser(req: Request, res: Response) {}
