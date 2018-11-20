@@ -48,7 +48,9 @@ def fetch_mail():
 
     service = build('gmail', 'v1', http=credentials.authorize(Http()))
 
-    query = 'label:unread from:notifications@morganstanley.com'
+    three_days_ago = datetime.date.today() - datetime.timedelta(3)
+
+    query = f'after:{three_days_ago} from:notifications@morganstanley.com'
 
     result = service\
         .users()\
