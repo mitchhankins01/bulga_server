@@ -50,7 +50,7 @@ def fetch_mail():
 
     three_days_ago = datetime.date.today() - datetime.timedelta(3)
 
-    query = f'after:{three_days_ago} from:notifications@morganstanley.com'
+    query = f'after:{three_days_ago} notifications@morganstanley.com subject:"Debit Card Transaction Authorized"'
 
     result = service\
         .users()\
